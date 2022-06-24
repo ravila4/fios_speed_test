@@ -20,10 +20,10 @@ class SpeedTest():
 
     def start_test(self):
         print("Starting test...")
-        response = requests.get(self.test_url,
-                                params={"Status": "TR143TestStart",
-                                        "IsLoggedIn": "N", "ssvz=": ""},
-                                headers=self.headers)
+        response = self.session.get(self.test_url,
+                                    params={"Status": "TR143TestStart",
+                                            "IsLoggedIn": "N", "ssvz=": ""},
+                                    headers=self.headers)
         response.raise_for_status()
         self.status = response.json()["StatusCode"]
         assert self.status == "S", "Failed to start test"
@@ -50,7 +50,7 @@ class SpeedTest():
         self.start_test()
         while self.status != "0":
             self.check_status()
-            logging.info("Download speed: {0: >6} | Upload speed: {1: >6} | Status: {2: >3}".format(
+            logging.info("Download speed: {0: >6} | Upload speed: {1: >6} | Status: {2}".format(
                 self.download, self.upload, self.status))
             sleep(1)
         print("Test complete.")
